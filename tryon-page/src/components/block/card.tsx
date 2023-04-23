@@ -4,17 +4,18 @@
  * @description base card component for tryon.
  */
 
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export interface CardFill {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   target?: "_self" | "_blank" | "_parent" | "_top";
-  rel: string;
-  href: string;
+  rel?: string;
+  href?: string;
+  className?: string;
 }
 
 const defaultProps: CardFill = {
@@ -23,6 +24,7 @@ const defaultProps: CardFill = {
   target: "_blank",
   rel: "noopener noreferrer",
   href: "#",
+  className: "",
 };
 
 export const BaseCard: React.FC<CardFill> = (props) => {
@@ -47,5 +49,49 @@ export const BaseCard: React.FC<CardFill> = (props) => {
         {description}
       </p>
     </a>
+  );
+};
+
+const TRANSITION_PROPERTY_CLICKABLE_CARD = "opacity";
+
+export const ClickableCard: React.FC<
+  CardFill & {
+    onclick?: (
+      state: boolean,
+      action: React.Dispatch<React.SetStateAction<boolean>>
+    ) => void;
+  }
+> = (props) => {
+  let { onclick, className } = {
+    ...defaultProps,
+    ...props,
+  };
+  const [clicked, setClicked] = useState(false);
+  const [transitionState, setTransitionState] = useState(false);
+  const handleClick = (event: React.TransitionEvent<HTMLDivElement>) => {
+    if (onclick) {
+      event.preventDefault();
+      event.stopPropagation();
+      onclick(transitionState, setTransitionState);
+    }
+  };
+  return (
+    <div
+      onClick={(e) => {
+        if (clicked) return;
+        setClicked(true);
+        setTransitionState(true);
+      }}
+      onTransitionEnd={(e) => {
+        if (e.propertyName === TRANSITION_PROPERTY_CLICKABLE_CARD) {
+          handleClick(e);
+        }
+      }}
+      className={`transition-opacity ${
+        transitionState ? "opacity-0" : "opacity-100"
+      } duration-500 hover:shadow-none ease-in-out hover:border-gray-300 hover:bg-gray-100 flex justify-start rounded-lg p-0 ${className}`}
+    >
+      <BaseCard {...props} />
+    </div>
   );
 };
