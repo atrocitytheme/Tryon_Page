@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Gmail } from "gmail-js";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -16,7 +15,10 @@ const initialValues = {
 };
 
 interface ContactFormFill {
-  onSubmit?: (values: ContactFormValueT) => void;
+  onSubmit?: (
+    values: ContactFormValueT,
+    sendEmailFunc: (from: string, text: string) => void
+  ) => void;
 }
 
 type ContactFormValueT = {
@@ -33,23 +35,17 @@ type ContactFormValueT = {
 export const ContactForm: React.FC<ContactFormFill> = ({ onSubmit }) => {
   const handleSubmit = (values: ContactFormValueT, { setSubmitting }) => {
     if (onSubmit) {
-      onSubmit(values);
+      onSubmit(values, sendEmail);
     }
     setSubmitting(false);
   };
-  const [gmail, setGmail] = useState<Gmail>(null);
-  useEffect(() => {
-    const gmailInstance = new Gmail();
-    setGmail(gmailInstance);
-  }, []);
 
   function sendEmail(from: string, text: string) {
-    const email = gmail?.compose({
-      to: BUSINESS_EMAIL,
-      subject: `[Nliolo] contact requested from  + ${from}`,
-      text,
-    });
-    email.send();
+    const subject = `[Nliolo Request] Contact from ${from}`;
+    const emailLink = `mailto:${encodeURIComponent(
+      BUSINESS_EMAIL
+    )}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+    window.open(emailLink);
   }
 
   return (

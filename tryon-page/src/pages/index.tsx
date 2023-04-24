@@ -124,16 +124,20 @@ export default function Home() {
         ref={contactRef}
       >
         {emailSent ? (
-          <p className=" font-semibold">
-            Thank you for your contact! Our team is processing and will soon get
-            back to you!
+          <p className=" font-semibold text-blue-500">
+            Thank you for your interest! Our team will touch base once you send
+            your email!
           </p>
         ) : (
-          <ContactForm
-            onSubmit={(values) => {
-              setEmailSent(true);
-            }}
-          />
+          <>
+            <a>nliolo.official@gmail.com</a>
+            <ContactForm
+              onSubmit={(values, sendEmail) => {
+                sendEmail(values.email, values.contactDescription);
+                setEmailSent(true);
+              }}
+            />
+          </>
         )}
       </div>
     </main>
