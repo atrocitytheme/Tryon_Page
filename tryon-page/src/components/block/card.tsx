@@ -6,7 +6,7 @@
 
 import React, { Component, useState } from "react";
 import { Inter } from "next/font/google";
-
+import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 export interface CardFill {
@@ -21,7 +21,7 @@ export interface CardFill {
 const defaultProps: CardFill = {
   title: "Default Title",
   description: "Default Description",
-  target: "_blank",
+  target: "_self",
   rel: "noopener noreferrer",
   href: "#",
   className: "",
@@ -52,6 +52,40 @@ export const BaseCard: React.FC<CardFill> = (props) => {
   );
 };
 
+export const BaseImageCard: React.FC<
+  CardFill & { img?: string; alt?: string }
+> = (props) => {
+  const defaultArgs = {
+    img: "/nliolo.svg",
+    alt: "Nliolo Logo",
+  };
+  const { description, img, alt } = {
+    ...defaultArgs,
+    ...defaultProps,
+    ...props,
+  };
+  return (
+    <div className="text-left">
+      <span className="group rounded-lg border border-transparent py-4 transition-colors inline-block mb-20">
+        <p className={`${inter.className} m-0 max-w-[30ch] text-md`}>
+          {description}
+          <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+            -&gt;
+          </span>
+        </p>
+      </span>
+      <Image
+        className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
+        src={img}
+        alt={alt}
+        width={180}
+        height={180}
+        priority
+      />
+    </div>
+  );
+};
+
 const TRANSITION_PROPERTY_CLICKABLE_CARD = "opacity";
 
 export const ClickableCard: React.FC<
@@ -71,7 +105,6 @@ export const ClickableCard: React.FC<
   const handleClick = (event: React.TransitionEvent<HTMLDivElement>) => {
     if (onclick) {
       event.preventDefault();
-      event.stopPropagation();
       onclick(transitionState, setTransitionState);
     }
   };

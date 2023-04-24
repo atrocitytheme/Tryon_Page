@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { Gmail } from "gmail-js";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
   contactDescription: Yup.string().required("Required"),
 });
+
+const BUSINESS_EMAIL = "nliolo.official@gmail.com";
 
 const initialValues = {
   email: "",
@@ -34,6 +37,21 @@ export const ContactForm: React.FC<ContactFormFill> = ({ onSubmit }) => {
     }
     setSubmitting(false);
   };
+  const [gmail, setGmail] = useState<Gmail>(null);
+  useEffect(() => {
+    const gmailInstance = new Gmail();
+    setGmail(gmailInstance);
+  }, []);
+
+  function sendEmail(from: string, text: string) {
+    const email = gmail?.compose({
+      to: BUSINESS_EMAIL,
+      subject: `[Nliolo] contact requested from  + ${from}`,
+      text,
+    });
+    email.send();
+  }
+
   return (
     <Formik
       initialValues={initialValues}
@@ -48,7 +66,7 @@ export const ContactForm: React.FC<ContactFormFill> = ({ onSubmit }) => {
                 className="block text-gray-700 font-bold mb-2"
                 htmlFor="email"
               >
-                Email
+                Your Email
               </label>
               <Field
                 className="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -83,7 +101,7 @@ export const ContactForm: React.FC<ContactFormFill> = ({ onSubmit }) => {
               />
             </div>
             <button
-              className="bg-gray-400 hover:border text-black font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+              className=" hover:bg-blue-200 bg-gray-400 hover:border text-black font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
               type="submit"
               disabled={isSubmitting}
             >
