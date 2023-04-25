@@ -24,7 +24,9 @@ export default function Home() {
           height={37}
           priority
         />
-        <p className="ml-2 font-serif text-gray-500">Everything's Virtual!</p>
+        <p className="ml-2 font-serif text-gray-500">
+          Everything&apos;s Virtual!
+        </p>
       </div>
       <div
         className={`mt-32 mb-32 grid text-center lg:mb-0 lg:grid-cols-${
