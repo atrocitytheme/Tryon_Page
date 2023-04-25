@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
@@ -24,7 +24,7 @@ const initialValues = {
 
 interface ContactFormFill {
   onSubmit?: (
-    values: ContactFormValueT,
+    values: EmailFormat,
     sendEmailFunc: (msg: EmailFormat) => void
   ) => void;
 }
@@ -36,7 +36,10 @@ interface ContactFormFill {
  * @param onSubmit - callback function for form submission, takes formik value as input.
  */
 export const ContactForm: React.FC<ContactFormFill> = ({ onSubmit }) => {
-  const handleSubmit = (values: EmailFormat, { setSubmitting }) => {
+  const handleSubmit = (
+    values: EmailFormat,
+    { setSubmitting }: FormikHelpers<EmailFormat>
+  ) => {
     if (onSubmit) {
       onSubmit(values, sendEmail);
     }

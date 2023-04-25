@@ -27,5 +27,3 @@ export const BaseBlock: React.FC<{ children: ReactNode }> = ({ children }) => {
     </div>
   );
 };
-
-export const ReturnableBlock: React.FC<> = (props) => {};
