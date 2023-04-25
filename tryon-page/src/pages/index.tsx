@@ -130,10 +130,9 @@ export default function Home() {
           </p>
         ) : (
           <>
-            <a>nliolo.official@gmail.com</a>
             <ContactForm
               onSubmit={(values, sendEmail) => {
-                sendEmail(values.email, values.contactDescription);
+                sendEmail({ ...values });
                 setEmailSent(true);
               }}
             />
