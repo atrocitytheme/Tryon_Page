@@ -33,11 +33,23 @@ export default function Home() {
           contactClicked ? "2" : "3"
         } md:grid-cols-2 lg:text-left`}
       >
-        <BaseCard
-          title="What's Nliolo?"
-          description="Our mission, our vision, and our values"
-          target="_self"
-        ></BaseCard>
+        {aboutClicked ? (
+          <></>
+        ) : (
+          <ClickableCard
+            title="What's Nliolo?"
+            description="Our mission, our vision, and our values"
+            onclick={(state, action) => {
+              setAboutClicked(true);
+              setTimeout(() => {
+                aboutRef.current!.scrollIntoView({
+                  behavior: "smooth",
+                  block: "nearest",
+                });
+              });
+            }}
+          ></ClickableCard>
+        )}
         {artifactClicked ? (
           <></>
         ) : (
@@ -77,13 +89,34 @@ export default function Home() {
         )}
       </div>
       <div
-        className={`grid lg:text-left sm:grid-cols-1 lg:grid-cols-3 h-screen transition-transform mt-20 focus:shadow-blue focus:outline-none ${
+        className={`h-screen transition-transform mt-20 focus:shadow-blue focus:outline-none ${
           aboutClicked
             ? "block transform-translate-y-full"
             : "hidden transform-none"
         }`}
         ref={aboutRef}
-      ></div>
+      >
+        <div className="h-2/3 grid">
+          <h2 className="text-4xl font-serif tracking-wider text-center text-gray-800">
+            Nliolo: Revolutionizing the virtual experience with Generative AI
+          </h2>
+          <p className="font-serif tracking-wider">
+            Nliolo is a generative AI company that provides cutting-edge
+            solutions for various industries. Its main focus is on try-on
+            models, which allow customers to see how clothes and accessories
+            will look on them before making a purchase. In addition to try-on
+            models, Nliolo also offers game image generation, which enables
+            developers to create realistic in-game characters and assets.
+            Nliolo's goal is to provide a personalized and enjoyable experience
+            for customers and developers. By using generative AI technology,
+            customers can try on different styles and sizes without leaving
+            their homes, saving them time and money. Nliolo's try-on models
+            benefit retailers by reducing return rates and increasing customer
+            satisfaction. On the other hand, game developers can use Nliolo's
+            game image generation to create their own characters and assets.
+          </p>
+        </div>
+      </div>
       <div
         className={`min-h-screen transition-transform mt-20 focus:shadow-blue focus:outline-none ${
           artifactClicked
@@ -100,8 +133,8 @@ export default function Home() {
           ></BaseImageCard>
           <BaseImageCard
             title="Generated try-on model"
-            description="TODO: add description"
-            img="/sample_1.png"
+            description="Generated Model (direct try on)"
+            img="/sample1.png"
           ></BaseImageCard>
         </div>
         <div className="grid lg:text-left sm:grid-cols-1 lg:grid-cols-2 gap-x-40 sm:gap-x-4">
@@ -112,8 +145,20 @@ export default function Home() {
           ></BaseImageCard>
           <BaseImageCard
             title="Generated try-on model"
-            description="TODO: add description"
-            img="/sample_2.png"
+            description="Generated try-on model (Generation)"
+            img="/sample2.png"
+          ></BaseImageCard>
+        </div>
+        <div className="grid lg:text-left sm:grid-cols-1 lg:grid-cols-2 gap-x-40 sm:gap-x-4">
+          <BaseImageCard
+            title="Pixel Game Graph 1"
+            description="Game Pixel 1"
+            img="/sample3.png"
+          ></BaseImageCard>
+          <BaseImageCard
+            title="Pixel Game Graph 2"
+            description="Game Pixel 2"
+            img="/sample4.png"
           ></BaseImageCard>
         </div>
       </div>
